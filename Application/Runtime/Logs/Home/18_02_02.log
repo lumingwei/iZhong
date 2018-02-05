@@ -1,0 +1,93 @@
+[ 2018-02-02T15:40:01+08:00 ] 127.0.0.1 /Home/City/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.017000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.017000s ]
+
+[ 2018-02-02T15:40:31+08:00 ] 127.0.0.1 /Home/City/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `war_city` [ RunTime:0.0520s ]
+SQL: SELECT `city_id` FROM `war_city` WHERE `player_id` = 1  [ RunTime:0.0100s ]
+SQL: SHOW COLUMNS FROM `war_city` [ RunTime:0.0030s ]
+SQL: SELECT * FROM `war_city` WHERE `city_id` IN (1) ORDER BY level desc  [ RunTime:0.0020s ]
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.027001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.027001s ]
+
+[ 2018-02-02T15:41:22+08:00 ] 127.0.0.1 /Home/City/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `war_city` [ RunTime:0.0030s ]
+SQL: SELECT `city_id` FROM `war_city` WHERE `player_id` = 1  [ RunTime:0.0000s ]
+SQL: SHOW COLUMNS FROM `war_city` [ RunTime:0.0040s ]
+SQL: SELECT * FROM `war_city` WHERE `city_id` IN (1) ORDER BY level desc  [ RunTime:0.0000s ]
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+NOTIC: [2] Illegal string offset 'city_id' D:\WWW\mall_game\Application\Home\Controller\CityController.class.php 第 46 行.
+
+[ 2018-02-02T19:09:55+08:00 ] 127.0.0.1 /Home/City/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.024001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.015001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.015001s ]
+
+[ 2018-02-02T19:10:03+08:00 ] 127.0.0.1 /Home/City/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
