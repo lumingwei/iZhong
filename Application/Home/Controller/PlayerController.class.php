@@ -45,4 +45,34 @@ class PlayerController extends BaseController {
            $this->json_return(array(),1,'failed');
        }
    }
+    public function get_play_action(){
+        $act_list   = M("Action")->select('action_id,action_code,action_name');
+        $goods_list = M("PlayGoods")->where(['play_id'=>$this->play_id,'use_time'=>['gt'=>0]])->getField('goods_id,goods_code');
+/*        $action_goods = [
+            'sow'       => array('apple_seed','pear_seed','watermelon_seed'),
+            'water'     => array('water_can'),
+            'fertilize' => array('muck'),
+            'worm'      => array('insecticide'),
+            'shave'     => array('clipper'),
+        ];*/
+        $goods_action = [
+            'apple_seed'      => 'sow',
+            'pear_seed'       => 'sow',
+            'watermelon_seed' => 'sow',
+            'water_can'       => 'water',
+            'muck'            => 'fertilize',
+            'insecticide'     => 'worm',
+            'clipper'         => 'shave'
+        ];
+        $ag  = array();
+        if(!empty($act_list) && !empty($goods_list)){
+            foreach($goods_list as $v){
+                $ag[$goods_action[$v['goods_code']]][] = $v;
+            }
+            foreach($act_list as $k =>$v){
+                $act_list[$k]['goods_list'] = isset($ag[$v['action_code']])?:array();
+            }
+        }
+        $this->json_return($act_list);
+    }
 }

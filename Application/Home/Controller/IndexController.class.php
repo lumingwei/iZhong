@@ -181,6 +181,21 @@ class IndexController extends Controller {
             $data['use_time']     = 200;
             $insert[]             = $data;
 
+            $data  = array();
+            $data['goods_name']   = '肥料';
+            $data['goods_code']   = 'muck';
+            $data['shop_price']   = 20;
+            $data['describe']     = '用于加速果树生长';
+            $data['use_time']     = 10;
+            $insert[]             = $data;
+
+            $data  = array();
+            $data['goods_name']   = '除虫剂';
+            $data['goods_code']   = 'insecticide';
+            $data['shop_price']   = 10;
+            $data['describe']     = '用于为果树除虫';
+            $data['use_time']     = 5;
+            $insert[]             = $data;
             M("Goods")->addAll($insert);
         }
         $this->display();

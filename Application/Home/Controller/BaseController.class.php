@@ -8,6 +8,11 @@ namespace Home\Controller;
 use Think\Controller;
 class BaseController extends Controller
 {
+    protected $play_id = 0;
+    public function  __construct()
+    {
+        parent::__construct();
+    }
     public function json_return($data = array() , $code = 0 ,$msg = 'success'){
          $return = array('data'=>$data,'code'=>$code,'msg'=>$msg);
          $this->showJsonResult($return);
