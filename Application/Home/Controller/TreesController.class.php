@@ -41,10 +41,10 @@ class TreesController extends BaseController {
                 $data               = array();
                 $data['tree_id']    = $tid;
                 $data['born_time']  = $now;
-                $data['status']     = 10;
+                $data['status']     = 1;
                 $insert[]           = $data;
-                M("Fruits")->addAll($insert);
             }
+            M("Fruits")->addAll($insert);
         }
         M("Trees")->where(['fruits_age',['egt',86400]])->setField('fruits_age',0);
         return true;
@@ -52,13 +52,17 @@ class TreesController extends BaseController {
 
     //1：未成熟|未收获 2：成熟|未收获  3：成熟|已收获 4：糜烂|未收获 5：糜烂|已收获
     protected function fruits_growth(){
+        $now = time();
         M("Fruits")->where(['status'=>['elt',3]])->setField('age','age+10'); // 生长值 + 10
         //1-->2  未成熟|未收获-->成熟|未收获
-        M("Fruits")->where(['status'=>1,'age'=>['egt',7200]])->setField('status',2);
+        //M("Fruits")->where(['status'=>1,'age'=>['egt',7200]])->setField('status',2);
+        M("Fruits")->where(['status'=>1,'age'=>['egt',7200]])->setField(array('status','ripe_time'),array(2,$now));
         //2-->4  成熟|未收获-->糜烂|未收获
-        M("Fruits")->where(['status'=>2,'age'=>['egt',18000]])->setField('status',4);
+        //M("Fruits")->where(['status'=>2,'age'=>['egt',18000]])->setField('status',4);
+        M("Fruits")->where(['status'=>2,'age'=>['egt',18000]])->setField(array('status','die_time'),array(4,$now));
         //3-->5  成熟|已收获-->糜烂|已收获
-        M("Fruits")->where(['status'=>3,'age'=>['egt',604800]])->setField('status',5);
+        //M("Fruits")->where(['status'=>3,'age'=>['egt',604800]])->setField('status',5);
+        M("Fruits")->where(['status'=>3,'age'=>['egt',604800]])->setField(array('status','die_time'),array(5,$now));
         return true;
     }
 

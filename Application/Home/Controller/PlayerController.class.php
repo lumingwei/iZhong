@@ -101,8 +101,8 @@ class PlayerController extends BaseController {
 
     public function action()
     {
-        $pg_id       = !empty($_REQUEST['pg_id'])       ? intval($_REQUEST['pg_id']) : '';
-        $tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : '';
+        $pg_id       = !empty($_REQUEST['pg_id'])       ? intval($_REQUEST['pg_id'])    : 0;
+        $tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : 0;
 
         if(empty($pg_id) || empty($tree_id)){
             $this->json_return(array(),1,'参数缺失!');
@@ -154,6 +154,43 @@ class PlayerController extends BaseController {
         }
         M('PlayerGoods')->where(['pg_id'=>$pg_id])->setDec('use_time',1);
         $this->json_return();
+    }
+
+    public function shop()
+    {
+       $goods_list = M('Goods')->select();
+       !empty($goods_list) && $goods_list = array();
+       $this->json_return($goods_list);
+    }
+
+    public function buy(){
+        $buy_num       = !empty($_REQUEST['buy_num'])      ? intval($_REQUEST['buy_num'])   : 1;
+        $goods_id      = !empty($_REQUEST['goods_id'])     ? intval($_REQUEST['goods_id'])  : 0;
+        $now           = time();
+        if(empty($goods_id) || empty($buy_num)){
+            $this->json_return(array(),1,'参数缺失!');
+        }
+        $goods = M('Goods')->where(['goods_id'=>$goods_id])->find();
+        $money = M('Player')->where(['id'=>$this->player_id])->getField('money');
+        $money = intval($money);
+        if(!empty($goods)){
+            if($money<$goods['shop_price']*$buy_num){
+                $this->json_return(array(),1,'金币不足!');
+            }
+            $insert                 = array();
+            for($i=0;$i<$buy_num;$i++){
+                $data               = array();
+                $data['player_id']  = $this->player_id;
+                $data['goods_code'] = $goods['goods_code'];
+                $data['use_time']   = $goods['use_time'];
+                $data['add_time']   = $now;
+                $insert[]           = $data;
+            }
+            M("PlayerGoods")->addAll($insert);
+        }else{
+            $this->json_return(array(),1,'商品不存在!');
+        }
+        $this->json_return(array(),0,'交易成功!');
     }
 
 }
