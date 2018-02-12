@@ -8,7 +8,7 @@ namespace Home\Controller;
 use Think\Controller;
 class BaseController extends Controller
 {
-    protected $play_id = 0;
+    protected $player_id = 0;
     public function  __construct()
     {
         parent::__construct();

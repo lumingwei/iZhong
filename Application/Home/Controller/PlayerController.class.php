@@ -38,6 +38,23 @@ class PlayerController extends BaseController {
                }
            }
            $ress = M("PlayerGoods")->addAll($insert);
+
+           $action_goods = [
+            'sow'       => array('apple_seed','pear_seed','watermelon_seed'),
+            'water'     => array('water_can'),
+            'fertilize' => array('muck'),
+            'worm'      => array('insecticide'),
+            'shave'     => array('clipper'),
+           ];
+           $insert       = array();
+           foreach($action_goods as $k=>$v){
+               $data = array();
+               $data['player_id']   = $name;
+               $data['action_code'] = $k;
+               $data['cd']          = 0;
+               $insert[] = $data;
+           }
+           M("PlayerAction")->addAll($insert);
        }
        if(!empty($ress)){
            $this->json_return();
@@ -47,7 +64,7 @@ class PlayerController extends BaseController {
    }
     public function get_play_action(){
         $act_list   = M("Action")->select('action_id,action_code,action_name');
-        $goods_list = M("PlayGoods")->where(['play_id'=>$this->play_id,'use_time'=>['gt'=>0]])->getField('goods_id,goods_code');
+        $goods_list = M("PlayGoods")->where(['play_id'=>$this->player_id,'use_time'=>['gt'=>0]])->getField('goods_id,goods_code');
 /*        $action_goods = [
             'sow'       => array('apple_seed','pear_seed','watermelon_seed'),
             'water'     => array('water_can'),
@@ -75,4 +92,68 @@ class PlayerController extends BaseController {
         }
         $this->json_return($act_list);
     }
+
+    public function get_message(){
+        $message_list   = M("PlayerMessage")->where(['play_id'=>$this->player_id])->order('id desc')->select();
+        !empty($message_list) && $message_list = array();
+        $this->json_return($message_list);
+    }
+
+    public function action()
+    {
+        $pg_id       = !empty($_REQUEST['pg_id'])       ? intval($_REQUEST['pg_id']) : '';
+        $tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : '';
+
+        if(empty($pg_id) || empty($tree_id)){
+            $this->json_return(array(),1,'参数缺失!');
+        }
+
+        $goods = M("PlayerGoods")->where(['pg_id'=>$pg_id,'player_id'=>$this->player_id])->find();
+        if(!empty($goods)){
+           if(empty($goods['use_time'])){
+               $this->json_return(array(),1,'物品不可用!');
+           }
+        }else{
+            $this->json_return(array(),1,'物品不存在!');
+        }
+        $action_code = !empty($goods['action_code'])? $goods['action_code'] : '';
+        $cd  = M("PlayerAction")->where(['player_id'=>$this->player_id,'action_code'=>$action_code])->getField('cd');
+        if(empty($cd)){
+            switch($action_code){
+                case 'sow':
+                    $has_tree = M("Trees")->where(['player_id'=>$this->player_id])->getField('tree_id');
+                    if(!empty($has_tree)){
+                        $this->json_return(array(),3,'您已经有果树了,无需再播种了~');
+                    }
+                    break;
+                case 'water':
+                    M("Trees")->where(['tree_id'=>$tree_id])->setInc('age', 10);
+                    M("PlayerAction")->where(['player_id'=>$this->player_id,'action_code'=>$action_code])->setInc('cd', 10);
+                    break;
+                case 'fertilize':
+                    M("Trees")->where(['tree_id'=>$tree_id])->setInc('age', 300);
+                    M("PlayerAction")->where(['player_id'=>$this->player_id,'action_code'=>$action_code])->setInc('cd', 1800);
+                    break;
+                case 'worm':
+                    $has_worm = M("TreeWorm")->where(['tree_id'=>$tree_id,'life_time'=>['gt',0]])->getField('id');
+                    if(!empty($has_worm)){
+                        if(rand(1,10)<=8){
+                            $this->json_return(array(),5,'除虫成功!');
+                        }else{
+                            $this->json_return(array(),5,'除虫失败!');
+                        }
+                        M("TreeWorm")->where(['tree_id'=>$tree_id,'life_time'=>['gt',0]])->setField('life_time',0);
+                    }else{
+                        $this->json_return(array(),5,'并没有害虫!');
+                    }
+                    M("PlayerAction")->where(['player_id'=>$this->player_id,'action_code'=>$action_code])->setInc('cd', 1800);
+                    break;
+            }
+        }else{
+            $this->json_return(array(),4,'操作尚未冷却!');
+        }
+        M('PlayerGoods')->where(['pg_id'=>$pg_id])->setDec('use_time',1);
+        $this->json_return();
+    }
+
 }

@@ -3,7 +3,7 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        $type = 7;
+        $type = 2;
         //果树类型导入
         if($type == 1){
             $data = array();
@@ -33,6 +33,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '种子期';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 0;
             $data['describe']  = '';
             $insert[] = $data;
 
@@ -40,6 +41,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '小树苗';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 0;
             $data['describe']  = '';
             $insert[] = $data;
 
@@ -47,6 +49,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '幼树期';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 1;
             $data['describe']  = '';
             $insert[] = $data;
 
@@ -54,6 +57,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '初果期';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 2;
             $data['describe']  = '';
             $insert[] = $data;
 
@@ -61,6 +65,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '盛果期';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 4;
             $data['describe']  = '';
             $insert[] = $data;
 
@@ -68,6 +73,7 @@ class IndexController extends Controller {
             $data['tree_type_id'] = 1;
             $data['stage_name'] = '衰老期';
             $data['growth_speed'] = 1;
+            $data['fruits_speed'] = 1;
             $data['describe']  = '';
             $insert[] = $data;
 
