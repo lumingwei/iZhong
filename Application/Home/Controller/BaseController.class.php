@@ -8,7 +8,16 @@ namespace Home\Controller;
 use Think\Controller;
 class BaseController extends Controller
 {
-    protected $player_id = 0;
+    protected $player_id = 1;
+    protected $goods_action = [
+        'apple_seed'      => 'sow',
+        'pear_seed'       => 'sow',
+        'watermelon_seed' => 'sow',
+        'water_can'       => 'water',
+        'muck'            => 'fertilize',
+        'insecticide'     => 'worm',
+        'clipper'         => 'shave'
+    ];
     public function  __construct()
     {
         parent::__construct();

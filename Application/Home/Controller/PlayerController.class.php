@@ -6,7 +6,7 @@ class PlayerController extends BaseController {
    public function create_play(){
        $name_obj = new rndChinaName();
        $name = $name_obj->getName(2);
-       $data = $insert = array();
+       $data  = array();
        $data['name'] = $name;
        $data['pwd'] = '123456';
        $data['money'] = 30;
@@ -15,9 +15,8 @@ class PlayerController extends BaseController {
        $data['watermelon']  = 0;
        $data['add_time']  = time();
        $data['describe']  = '';
-       $insert[] = $data;
-       $res = M("Player")->addAll($insert);
-       if(!empty($res)){
+       $play_id = M("Player")->add($data);
+       if(!empty($play_id)){
            $give_goods = [
                'apple_seed' => 1,
                'water_can'  => 2
@@ -29,7 +28,7 @@ class PlayerController extends BaseController {
                for($i=0;$i<$v;$i++){
                    if(isset($goods_list[$k])){
                        $data = array();
-                       $data['player_id'] = $name;
+                       $data['player_id'] = $play_id;
                        $data['goods_code'] = $k;
                        $data['use_time']   = $goods_list[$k];
                        $data['add_time']   = time();
@@ -49,7 +48,7 @@ class PlayerController extends BaseController {
            $insert       = array();
            foreach($action_goods as $k=>$v){
                $data = array();
-               $data['player_id']   = $name;
+               $data['player_id']   = $play_id;
                $data['action_code'] = $k;
                $data['cd']          = 0;
                $insert[] = $data;
@@ -63,8 +62,8 @@ class PlayerController extends BaseController {
        }
    }
     public function get_play_action(){
-        $act_list   = M("Action")->select('action_id,action_code,action_name');
-        $goods_list = M("PlayGoods")->where(['play_id'=>$this->player_id,'use_time'=>['gt'=>0]])->getField('goods_id,goods_code');
+        $act_list   = M("Action")->field('action_id,action_code,action_name')->select();
+        $goods_list = M("PlayerGoods")->where(['player_id'=>$this->player_id,'use_time'=>['gt',0]])->getField('pg_id,goods_code,use_time',true);
 /*        $action_goods = [
             'sow'       => array('apple_seed','pear_seed','watermelon_seed'),
             'water'     => array('water_can'),
@@ -72,42 +71,42 @@ class PlayerController extends BaseController {
             'worm'      => array('insecticide'),
             'shave'     => array('clipper'),
         ];*/
-        $goods_action = [
-            'apple_seed'      => 'sow',
-            'pear_seed'       => 'sow',
-            'watermelon_seed' => 'sow',
-            'water_can'       => 'water',
-            'muck'            => 'fertilize',
-            'insecticide'     => 'worm',
-            'clipper'         => 'shave'
-        ];
         $ag  = array();
         if(!empty($act_list) && !empty($goods_list)){
             foreach($goods_list as $v){
-                $ag[$goods_action[$v['goods_code']]][] = $v;
+                $ag[$this->goods_action[$v['goods_code']]][] = $v;
             }
             foreach($act_list as $k =>$v){
-                $act_list[$k]['goods_list'] = isset($ag[$v['action_code']])?:array();
+                $act_list[$k]['goods_list'] = isset($ag[$v['action_code']])?$ag[$v['action_code']]:array();
             }
         }
         $this->json_return($act_list);
     }
 
     public function get_message(){
-        $message_list   = M("PlayerMessage")->where(['play_id'=>$this->player_id])->order('id desc')->select();
-        !empty($message_list) && $message_list = array();
-        $this->json_return($message_list);
+        $pn = !empty($_REQUEST['page_num'])?intval($_REQUEST['page_num']):1;
+        $ps = !empty($_REQUEST['page_size'])?intval($_REQUEST['page_size']):10;
+        $message_list   = M("PlayerMessage")->where(['play_id'=>$this->player_id])->page($pn, $ps)->order('id desc')->select();
+        $total_count    = M("PlayerMessage")->where(['play_id'=>$this->player_id])->count();
+        $total_page     = !empty($total_count)?ceil($total_count/$ps):0;
+        $message_list   = !empty($message_list)?$message_list:array();
+        $res = array(
+            'list'=>$message_list,
+            'page_num'=>$pn,
+            'page_size'=>$ps,
+            'total_count'=>$total_count,
+            'total_page'=>$total_page
+        );
+        $this->json_return($res);
     }
 
     public function action()
     {
         $pg_id       = !empty($_REQUEST['pg_id'])       ? intval($_REQUEST['pg_id'])    : 0;
         $tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : 0;
-
-        if(empty($pg_id) || empty($tree_id)){
+        if(empty($pg_id)){
             $this->json_return(array(),1,'参数缺失!');
         }
-
         $goods = M("PlayerGoods")->where(['pg_id'=>$pg_id,'player_id'=>$this->player_id])->find();
         if(!empty($goods)){
            if(empty($goods['use_time'])){
@@ -116,14 +115,22 @@ class PlayerController extends BaseController {
         }else{
             $this->json_return(array(),1,'物品不存在!');
         }
-        $action_code = !empty($goods['action_code'])? $goods['action_code'] : '';
+
+        $action_code = !empty($this->goods_action[$goods['goods_code']])? $this->goods_action[$goods['goods_code']] : '';
         $cd  = M("PlayerAction")->where(['player_id'=>$this->player_id,'action_code'=>$action_code])->getField('cd');
+        if($action_code != 'sow' && empty($tree_id)){
+            $this->json_return(array(),1,'参数缺失!');
+        }
         if(empty($cd)){
             switch($action_code){
                 case 'sow':
                     $has_tree = M("Trees")->where(['player_id'=>$this->player_id])->getField('tree_id');
                     if(!empty($has_tree)){
                         $this->json_return(array(),3,'您已经有果树了,无需再播种了~');
+                    }else{
+                        $data  = array();
+                        $data['player_id'] = $this->player_id;
+                        M("Trees")->add($data);
                     }
                     break;
                 case 'water':
@@ -159,7 +166,7 @@ class PlayerController extends BaseController {
     public function shop()
     {
        $goods_list = M('Goods')->select();
-       !empty($goods_list) && $goods_list = array();
+       empty($goods_list) && $goods_list = array();
        $this->json_return($goods_list);
     }
 
@@ -193,4 +200,8 @@ class PlayerController extends BaseController {
         $this->json_return(array(),0,'交易成功!');
     }
 
+    public function player_info(){
+        $player_info = M("Player")->where(['player_id'=>$this->player_id])->find();
+        $this->json_return($player_info);
+    }
 }
