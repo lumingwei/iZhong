@@ -3,7 +3,12 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        $type = 2;
+        for($i=1;$i<6;$i++){
+            $this->init_data($i);
+        }
+        $this->display();
+    }
+    public function init_data($type = 20){
         //果树类型导入
         if($type == 1){
             $data = array();
@@ -204,6 +209,6 @@ class IndexController extends Controller {
             $insert[]             = $data;
             M("Goods")->addAll($insert);
         }
-        $this->display();
+        return true;
     }
 }
