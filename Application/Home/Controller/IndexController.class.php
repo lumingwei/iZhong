@@ -6,7 +6,7 @@ class IndexController extends Controller {
         for($i=1;$i<6;$i++){
             $this->init_data($i);
         }
-        $this->display();
+        exit('success!');
     }
     public function init_data($type = 20){
         //果树类型导入
