@@ -3,7 +3,7 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        if(isset($_REQUEST['spe']) && $_REQUEST['spe']='lmw666'){
+        if(isset($_REQUEST['spe']) && $_REQUEST['spe']=='lmw666'){
             $delete_sql[]="truncate table sow.sow_action";
             $delete_sql[]="truncate table sow.sow_fruits";
             $delete_sql[]="truncate table sow.sow_goods";
@@ -19,7 +19,7 @@ class IndexController extends Controller {
                 @M()->query($del);
             }
         }
-        if(isset($_REQUEST['spe']) && $_REQUEST['spe']='lmw777'){
+        if(isset($_REQUEST['spe']) && $_REQUEST['spe']=='lmw777'){
             for($i=1;$i<6;$i++){
                 $this->init_data($i);
             }
