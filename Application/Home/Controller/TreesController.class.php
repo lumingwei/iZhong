@@ -10,8 +10,10 @@ class TreesController extends BaseController {
      **/
     public function synGrowth()
     {
+        echo date('Y-m-d H:i:s',time())."start \n";
         $this->trees_growth();
         $this->fruits_growth();
+        echo date('Y-m-d H:i:s',time()).'end';
         return true;
     }
     protected function trees_growth(){
