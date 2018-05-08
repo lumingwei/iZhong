@@ -10,11 +10,20 @@ class TreesController extends BaseController {
      **/
     public function synGrowth()
     {
-        echo date('Y-m-d H:i:s',time())."start \n";
+        $this->log(date('Y-m-d H:i:s',time())."start");
+        //echo date('Y-m-d H:i:s',time())."start \n";
         $this->trees_growth();
         $this->fruits_growth();
-        echo date('Y-m-d H:i:s',time()).'end';
+        //echo date('Y-m-d H:i:s',time()).'end';
+        $this->log(date('Y-m-d H:i:s',time()).'end');
         return true;
+    }
+    public function log($msg, $level = 'INFO')
+    {
+        $msg = sprintf('[%s][%s]:%s', CONTROLLER_NAME, ACTION_NAME, $msg);
+
+        echo $msg . PHP_EOL;
+        \Think\Log::write($msg, $level);
     }
     protected function trees_growth(){
         $now          =  time();
