@@ -3,17 +3,17 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        $delete_sql[]="truncate table sow_action";
-        $delete_sql[]="truncate table sow_fruits";
-        $delete_sql[]="truncate table sow_goods";
-        $delete_sql[]="truncate table sow_message";
-        $delete_sql[]="truncate table sow_player_action";
-        $delete_sql[]="truncate table sow_player_goods";
-        $delete_sql[]="truncate table sow_tree_stage";
-        $delete_sql[]="truncate table sow_tree_type";
-        $delete_sql[]="truncate table sow_tree_worm";
-        $delete_sql[]="truncate table sow_trees";
-        $delete_sql[]="truncate table sow_weather";
+        $delete_sql[]="truncate table sow.sow_action";
+        $delete_sql[]="truncate table sow.sow_fruits";
+        $delete_sql[]="truncate table sow.sow_goods";
+        $delete_sql[]="truncate table sow.sow_message";
+        $delete_sql[]="truncate table sow.sow_player_action";
+        $delete_sql[]="truncate table sow.sow_player_goods";
+        $delete_sql[]="truncate table sow.sow_tree_stage";
+        $delete_sql[]="truncate table sow.sow_tree_type";
+        $delete_sql[]="truncate table sow.sow_tree_worm";
+        $delete_sql[]="truncate table sow.sow_trees";
+        $delete_sql[]="truncate table sow.sow_weather";
         foreach($delete_sql as $del){
              M()->query($del);
         }
