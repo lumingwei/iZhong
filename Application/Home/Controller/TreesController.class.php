@@ -45,7 +45,7 @@ class TreesController extends BaseController {
         M("Trees")->where(['stage_id'=>5,'age'=>['egt',432000]])->setField('stage_id',6);
 
         //结果
-        $born_fruit_trees = M("Trees")->where(['fruits_age',['egt',86400]])->getField('tree_id',true);
+        $born_fruit_trees = M("Trees")->where(['fruits_age'=>['egt',86400]])->getField('tree_id',true);
         if(!empty($born_fruit_trees)){
             $insert                 = array();
             foreach($born_fruit_trees as $tid){
@@ -57,7 +57,7 @@ class TreesController extends BaseController {
             }
             M("Fruits")->addAll($insert);
         }
-        M("Trees")->where(['fruits_age',['egt',86400]])->setField('fruits_age',0);
+        M("Trees")->where(['fruits_age'=>['egt',86400]])->setField('fruits_age',0);
         return true;
     }
 
