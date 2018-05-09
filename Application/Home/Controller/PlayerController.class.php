@@ -130,6 +130,7 @@ class PlayerController extends BaseController {
                     }else{
                         $data  = array();
                         $data['player_id'] = $this->player_id;
+                        $data['born_time'] = time();
                         M("Trees")->add($data);
                     }
                     break;
