@@ -205,4 +205,8 @@ class PlayerController extends BaseController {
         $player_info = M("Player")->where(['player_id'=>$this->player_id])->find();
         $this->json_return($player_info);
     }
+    public function player_tree(){
+        $player_tree = M("Trees")->where(['player_id'=>$this->player_id])->find();
+        $this->json_return($player_tree);
+    }
 }
