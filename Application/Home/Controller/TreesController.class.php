@@ -27,7 +27,7 @@ class TreesController extends BaseController {
     }
     protected function trees_growth(){
         $now          =  time();
-        M("Trees")->setInc('age',10); // 生长值 + 10 //setField
+        M("Trees")->where([])->setInc('age',10); // 生长值 + 10   gg写法 M("Trees")->setInc('age',10);
         M("Trees")->where(['stage_id'=>['in',[3,6]]])->setInc('fruits_age',10); // 结果值 + 10
         M("Trees")->where(['stage_id'=>4])->setInc('fruits_age',20); // 结果值 + 20
         M("Trees")->where(['stage_id'=>5])->setInc('fruits_age',40); // 结果值 + 40
