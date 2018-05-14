@@ -58,7 +58,8 @@
         if (pg_id == '') {
             return;
         }
-        var url = '/home/player/action/pg_id/' + pg_id;
+        //var url = '/home/player/action/pg_id/' + pg_id;
+        var url = 'index.php?m=home&c=player&a=action&pg_id=' + pg_id;
         $.getJSON(url).done(function (res) {
             if (res.code != 0) {
                 synPlayerGoods(playerId);
@@ -73,7 +74,8 @@
         if (playerId == '') {
             return;
         }
-        var url = '/home/player/player_goods/player_id/' + playerId;
+        //var url = '/home/player/player_goods/player_id/' + playerId;
+        var url = 'index.php?m=home&c=player&a=player_goods&player_id=' + playerId;
         $.getJSON(url).done(function (res) {
             if (res.data) {
                 var data = res.data;
@@ -92,7 +94,8 @@
         if (playerId == '') {
             return;
         }
-        var url = '/home/player/player_info/player_id/' + playerId;
+        //var url = '/home/player/player_info/player_id/' + playerId;
+        var url = 'index.php?m=home&c=player&a=player_info&player_id=' + playerId;
         $.getJSON(url).done(function (res) {
             if (res.data) {
                 var data = res.data;
@@ -109,7 +112,8 @@
         if (playerId == '') {
             return;
         }
-        var url = '/home/player/player_tree/player_id/' + playerId;
+        //var url = '/home/player/player_tree/player_id/' + playerId;
+        var url = 'index.php?m=home&c=player&a=player_tree&player_id=' + playerId;
         $.getJSON(url).done(function (res) {
             if (res.data) {
                 var data = res.data;
@@ -126,6 +130,7 @@
     }
     function synWeather() {
         var url = '/home/player/get_weather';
+        var url = 'index.php?m=home&c=player&a=get_weather';
         $.getJSON(url).done(function (res) {
             if (res.data) {
                 var str = '天气:';
