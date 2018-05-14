@@ -14,6 +14,7 @@ class TreesController extends BaseController {
         //echo date('Y-m-d H:i:s',time())."start \n";
         $this->trees_growth();
         $this->fruits_growth();
+        $this->player_cd();
         //echo date('Y-m-d H:i:s',time()).'end';
         $this->log(date('Y-m-d H:i:s',time()).'end');
         return true;
@@ -24,6 +25,9 @@ class TreesController extends BaseController {
 
         echo $msg . PHP_EOL;
         \Think\Log::write($msg, $level);
+    }
+    protected function player_cd(){
+        M("PlayerAction")->where(['cd'=>['gt',0]])->setDec('cd');
     }
     protected function trees_growth(){
         $now          =  time();

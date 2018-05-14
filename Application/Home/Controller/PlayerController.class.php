@@ -77,7 +77,8 @@ class PlayerController extends BaseController {
                 $ag[$this->goods_action[$v['goods_code']]][] = $v;
             }
             foreach($act_list as $k =>$v){
-                $act_list[$k]['goods_list'] = isset($ag[$v['action_code']])?$ag[$v['action_code']]:array();
+                $act_list[$k]['pg_id'] = isset($ag[$v['action_code']])?$ag[$v['action_code']][0]['pg_id']:0;
+                //$act_list[$k]['goods_list'] = isset($ag[$v['action_code']])?$ag[$v['action_code']]:array();
             }
         }
         $this->json_return($act_list);
@@ -103,7 +104,9 @@ class PlayerController extends BaseController {
     public function action()
     {
         $pg_id       = !empty($_REQUEST['pg_id'])       ? intval($_REQUEST['pg_id'])    : 0;
-        $tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : 0;
+        //$tree_id     = !empty($_REQUEST['tree_id'])     ? intval($_REQUEST['tree_id'])  : 0;
+        $has_tree    = M("Trees")->where(['player_id'=>$this->player_id])->getField('tree_id');
+        $tree_id     = $has_tree;
         if(empty($pg_id)){
             $this->json_return(array(),1,'参数缺失!');
         }
@@ -124,7 +127,6 @@ class PlayerController extends BaseController {
         if(empty($cd)){
             switch($action_code){
                 case 'sow':
-                    $has_tree = M("Trees")->where(['player_id'=>$this->player_id])->getField('tree_id');
                     if(!empty($has_tree)){
                         $this->json_return(array(),3,'您已经有果树了,无需再播种了~');
                     }else{
@@ -161,7 +163,7 @@ class PlayerController extends BaseController {
             $this->json_return(array(),4,'操作尚未冷却!');
         }
         M('PlayerGoods')->where(['pg_id'=>$pg_id])->setDec('use_time',1);
-        $this->json_return();
+        $this->json_return(array(),0,'操作成功!');
     }
 
     public function shop()
@@ -207,6 +209,48 @@ class PlayerController extends BaseController {
     }
     public function player_tree(){
         $player_tree = M("Trees")->where(['player_id'=>$this->player_id])->find();
+        if(!empty($player_tree)){
+            $player_tree['stage_name'] = M("TreeStage")->where(['tree_stage_id'=>$player_tree['stage_id']])->getField('stage_name');
+        }
         $this->json_return($player_tree);
+    }
+    public function player_goods(){
+        $goods_list  = M('PlayerGoods')->alias('pg')
+            ->join('sow_goods g ON pg.goods_code = g.goods_code')
+            ->where(['pg.player_id'=>$this->player_id,'pg.use_time'=>['gt',0]])
+            ->field('pg.pg_id,pg.goods_code,pg.use_time,g.goods_name,g.describe')
+            ->select();
+        empty($goods_list) && $goods_list = array();
+        $this->json_return($goods_list);
+    }
+
+    public function get_weather()
+    {
+        $id = rand(1,4);
+        $weather  = M('Weather')->where(['weather_id'=>$id])->find();
+        empty($weather) && $weather = array();
+        $this->json_return($weather);
+    }
+
+    public function index(){
+        $player_info = M("Player")->where(['player_id'=>$this->player_id])->find();
+        $player_tree = M("Trees")->where(['player_id'=>$this->player_id])->find();
+        $goods_list  = M('PlayerGoods')->alias('pg')
+            ->join('sow_goods g ON pg.goods_code = g.goods_code')
+            ->where(['pg.player_id'=>$this->player_id,'pg.use_time'=>['gt',0]])
+            ->field('pg.pg_id,pg.goods_code,pg.use_time,g.goods_name,g.describe')
+            ->select();
+        if(!empty($player_tree)){
+            $player_tree['stage_name'] = M("TreeStage")->where(['tree_stage_id'=>$player_tree['stage_id']])->getField('stage_name');
+            $player_tree['born_time']  = !empty($player_tree['born_time']) ? date('Y-m-d H:i:s',$player_tree['born_time']): '';
+            $player_tree['die_time']   = !empty($player_tree['die_time']) ? date('Y-m-d H:i:s',$player_tree['die_time']): '';
+        }
+        $id = rand(1,4);
+        $weather  = M('Weather')->where(['weather_id'=>$id])->find();
+        $this->assign('player_info',$player_info);
+        $this->assign('tree_info',$player_tree);
+        $this->assign('goods_list',$goods_list);
+        $this->assign('weather',$weather);
+        $this->display('Player/index');
     }
 }

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="种苹果" />
+    <meta name="description" content="种苹果" />
+    <title>爱种</title>
+</head>
+<body>
+<script src="/Public/js/jquery_1.11.0.js"></script>
+<div class="main">
+    <h1>天气信息</h1>
+    <p   id="weather">天气:{$weather.weather_name}</p>
+    <h1>玩家信息</h1>
+    <p   id="tips"></p>
+    <div id="play">
+        <p>玩家昵称:{$player_info.name}</p>
+        <p>金币:{$player_info.money}</p>
+        <p>苹果数量:{$player_info.apple}</p>
+        <p>个性签名:{$player_info.describe}</p>
+    </div>
+    <br />
+    <h1>苹果树</h1>
+    <p>出生日期:{$tree_info.born_time}</p>
+    <if condition="$tree_info['die_time'] neq ''">
+        <p>死亡日期:{$tree_info.die_time}</p>
+    </if>
+    <div id="tree">
+        <p>成长值:{$tree_info.age}</p>
+        <p>成长阶段:{$tree_info.stage_name}</p>
+        <p>生长速度:{$tree_info.growth_speed}</p>
+        <p>结果速度:{$tree_info.fruits_speed}</p>
+        <p>结果值:{$tree_info.fruits_age}</p>
+        <p>生长情况:{$tree_info.describe}</p>
+    </div>
+    <h1>物品</h1>
+    <div id="goods">
+    </div>
+</div>
+<style type="text/css">
+    .main{
+        text-align: center;
+        background-color: #fff;
+        border-radius: 20px;
+        width: 300px;
+        height: 350px;
+        position: absolute;
+        left: 50%;
+        top: 20%;
+        transform: translate(-50%,-50%);
+    }
+</style>
+<script>
+    var playerId  = 1;
+    var retryTime = 0;
+    synPlayerGoods(playerId);
+    function operate(pg_id) {
+        if (pg_id == '') {
+            return;
+        }
+        var url = '/home/player/action/pg_id/' + pg_id;
+        $.getJSON(url).done(function (res) {
+            if (res.code != 0) {
+                synPlayerGoods(playerId);
+                alert(res.msg);
+            }else{
+                synPlayerGoods(playerId);
+            }
+        });
+        return true;
+    }
+    function synPlayerGoods(playerId) {
+        if (playerId == '') {
+            return;
+        }
+        var url = '/home/player/player_goods/player_id/' + playerId;
+        $.getJSON(url).done(function (res) {
+            if (res.data) {
+                var data = res.data;
+                var str  = '<p>';
+                if(data !== null || data !== undefined || data !== ''){
+                    data.forEach(function(ele,index){
+                        str += '<button  onclick="operate('+data[index]['pg_id']+')">'+ data[index]['goods_name'] + '('+data[index]['use_time']+')'+'</button> &nbsp'
+                    });
+                }
+                str += '</p>';
+                $('#goods').html(str);
+            }
+        });
+    }
+    function synPlayerInfo(playerId) {
+        if (playerId == '') {
+            return;
+        }
+        var url = '/home/player/player_info/player_id/' + playerId;
+        $.getJSON(url).done(function (res) {
+            if (res.data) {
+                var data = res.data;
+                var str  = '';
+                str     += '<p>玩家昵称:'+data.name+'</p>';
+                str     += '<p>金币:'+data.money+'</p>';
+                str     += '<p>苹果数量:'+data.apple+'</p>';
+                str     += '<p>个性签名:'+data.describe+'</p>';
+                $('#play').html(str);
+            }
+        });
+    }
+    function synTreeInfo(playerId) {
+        if (playerId == '') {
+            return;
+        }
+        var url = '/home/player/player_tree/player_id/' + playerId;
+        $.getJSON(url).done(function (res) {
+            if (res.data) {
+                var data = res.data;
+                var str  = '';
+                str     += '<p>成长值:'+data.age+'</p>';
+                str     += '<p>成长阶段:'+data.stage_name+'</p>';
+                str     += '<p>生长速度:'+data.growth_speed+'</p>';
+                str     += '<p>结果速度:'+data.fruits_speed+'</p>';
+                str     += '<p>结果值:'+data.fruits_age+'</p>';
+                str     += '<p>生长情况:'+data.describe+'</p>';
+                $('#tree').html(str);
+            }
+        });
+    }
+    function synWeather() {
+        var url = '/home/player/get_weather';
+        $.getJSON(url).done(function (res) {
+            if (res.data) {
+                var str = '天气:';
+                str += res.data.weather_name;
+                $('#weather').text(str)
+            }
+        });
+    }
+    $(function(){
+        if (playerId) {
+            intId  = setInterval(function(){
+                synPlayerInfo(playerId);
+            }, 30000);
+            intId2 = setInterval(function(){
+                synTreeInfo(playerId);
+            }, 30000);
+            intId3 = setInterval(function(){
+                synPlayerGoods(playerId);
+            }, 30000);
+            intId4 = setInterval(function(){
+                synWeather();
+            }, 600000);
+        } else {
+            var err = "同步信息异常";
+            $('#tips').text(err)
+        }
+    });
+</script>
+</body>
+</html>
