@@ -14,11 +14,11 @@ class TreesController extends BaseController {
         //echo date('Y-m-d H:i:s',time())."start \n";
         $this->trees_growth();
         $this->fruits_growth();
-        $this->player_cd();
         //echo date('Y-m-d H:i:s',time()).'end';
         $this->log(date('Y-m-d H:i:s',time()).'end');
         return true;
     }
+
     public function log($msg, $level = 'INFO')
     {
         $msg = sprintf('[%s][%s]:%s', CONTROLLER_NAME, ACTION_NAME, $msg);
@@ -26,8 +26,10 @@ class TreesController extends BaseController {
         echo $msg . PHP_EOL;
         \Think\Log::write($msg, $level);
     }
-    protected function player_cd(){
-        M("PlayerAction")->where(['cd'=>['gt',0]])->setDec('cd');
+    //每五秒钟执行一次 技能冷却时间调控
+    public function player_cd(){
+        M("PlayerAction")->where(['cd'=>['egt',5]])->setDec('cd',5);
+        M("PlayerAction")->where(['cd'=>['lt',5]])->setField('cd',0);
     }
     protected function trees_growth(){
         $now          =  time();
