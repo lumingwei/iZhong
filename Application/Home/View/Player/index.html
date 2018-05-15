@@ -36,7 +36,7 @@
     <h1>物品</h1>
     <div id="goods">
     </div>
-    <h1>道具商店</h1>
+    <h1 onclick="showShop()">道具商店</h1>
     <div id="shop">
     </div>
 </div>
@@ -56,8 +56,19 @@
 <script>
     var playerId  = 1;
     var retryTime = 0;
+    var show_shop = 0;
     synPlayerGoods(playerId);
     synShop();
+    $('#shop').hide();
+    function showShop(){
+        if(show_shop == 1){
+            show_shop = 0;
+            $('#shop').hide();
+        }else{
+            show_shop = 1;
+            $('#shop').show();
+        }
+    }
     function buy(goods_id) {
         if (goods_id == '') {
             return;
@@ -103,13 +114,21 @@
         $.getJSON(url).done(function (res) {
             if (res.data) {
                 var data = res.data;
-                var str  = '<p>';
+                var str  = '';
+                var ii   = 1;
                 if(data !== null || data !== undefined || data !== ''){
+                    len = data.length;
                     data.forEach(function(ele,index){
+                        if(ii%3 == 1){
+                            str += '<p>';
+                        }
                         str += '<button  onclick="operate('+data[index]['pg_id']+')">'+ data[index]['goods_name'] + '('+data[index]['use_time']+')'+'</button> &nbsp'
+                        if(ii%3 == 0 || ii == len){
+                            str += '</p>';
+                        }
+                        ii++;
                     });
                 }
-                str += '</p>';
                 $('#goods').html(str);
             }
         });
