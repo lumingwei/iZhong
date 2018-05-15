@@ -36,6 +36,9 @@
     <h1>物品</h1>
     <div id="goods">
     </div>
+    <h1>道具商店</h1>
+    <div id="shop">
+    </div>
 </div>
 <style type="text/css">
     .main{
@@ -54,6 +57,26 @@
     var playerId  = 1;
     var retryTime = 0;
     synPlayerGoods(playerId);
+    synShop();
+    function buy(goods_id) {
+        if (goods_id == '') {
+            return;
+        }
+        //var url = '/home/player/action/pg_id/' + pg_id;
+        var url = 'index.php?m=home&c=player&a=buy&goods_id=' + goods_id;
+        $.getJSON(url).done(function (res) {
+            if (res.code != 0) {
+                synPlayerGoods(playerId);
+                synPlayerInfo(playerId);
+                alert(res.msg);
+            }else{
+                synPlayerGoods(playerId);
+                synPlayerInfo(playerId);
+                alert(res.msg);
+            }
+        });
+        return true;
+    }
     function operate(pg_id) {
         if (pg_id == '') {
             return;
@@ -63,6 +86,7 @@
         $.getJSON(url).done(function (res) {
             if (res.code != 0) {
                 synPlayerGoods(playerId);
+                synTreeInfo(playerId);
                 alert(res.msg);
             }else{
                 synPlayerGoods(playerId);
@@ -136,6 +160,29 @@
                 var str = '天气:';
                 str += res.data.weather_name;
                 $('#weather').text(str)
+            }
+        });
+    }
+    function synShop() {
+        var url = 'index.php?m=home&c=player&a=shop';
+        $.getJSON(url).done(function (res) {
+            if (res.data) {
+                var data = res.data;
+                var str  = '';
+                str = '<table align="center" border="8"><tr> <th>道具名称</th> <th>售价</th> <th>用途</th> <th>可使用次数</th> <th>操作</th> </tr>';
+                if(data !== null || data !== undefined || data !== ''){
+                    data.forEach(function(ele,index){
+                        str += '<tr>';
+                        str += '<td align="center">'+data[index]['goods_name']+'</td>';
+                        str += '<td align="center">'+data[index]['shop_price']+'</td>';
+                        str += '<td align="center">'+data[index]['describe']+'</td>';
+                        str += '<td align="center">'+data[index]['use_time']+'</td>';
+                        str += '<td align="center"><button onclick="buy('+ data[index]['goods_id']+')">购买</button></td>';
+                        str += '</tr>';
+                    });
+                }
+                str += '</table>';
+                $('#shop').html(str);
             }
         });
     }

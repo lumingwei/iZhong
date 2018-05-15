@@ -196,7 +196,10 @@ class PlayerController extends BaseController {
                 $data['add_time']   = $now;
                 $insert[]           = $data;
             }
-            M("PlayerGoods")->addAll($insert);
+            $res = M("PlayerGoods")->addAll($insert);
+            if(!empty($res)){
+                M('Player')->where(['id'=>$this->player_id])->setDec('money',$goods['shop_price']*$buy_num);
+            }
         }else{
             $this->json_return(array(),1,'商品不存在!');
         }
